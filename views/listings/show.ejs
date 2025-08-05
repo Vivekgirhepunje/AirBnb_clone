@@ -1,0 +1,15 @@
+<%layout("/layouts/boilerplate") %>
+<body>
+     <form style="display: inline-block;" method="get" action="/listings/<%=listing._id%>/edit">
+        <button>Edit Listing</button>
+     </form>
+      <form style="display: inline-block;" method="post" action="/listings/<%=listing._id%>?_method=DELETE">
+        <button>Delete listing</button>
+    </form>
+    <h3><%=listing.title%></h3>
+    <h4><%=listing.description%></h4>
+    <h4>&#8377; <%=listing.price.toLocaleString('US-IN') %></h4>
+    <h4><%=listing.location%></h4>
+    <h4><%=listing.country%></h4>
+   
+</body>
