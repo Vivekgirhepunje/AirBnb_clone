@@ -59,7 +59,6 @@ app.post('/listings',async (req,res)=>{
 // for editing existing listing
 app.get("/listings/:id/edit",async (req,res)=>{
     let listing=await Listing.findById(req.params.id)
-    console.log(listing)
     res.render('./listings/edit.ejs',{listing})
 })
 
