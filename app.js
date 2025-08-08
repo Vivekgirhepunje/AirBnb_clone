@@ -10,11 +10,11 @@ const ejsMate= require('ejs-mate')
 
 // Middleware to parse URL-encoded bodies (form data)
 app.use(express.urlencoded({ extended: true }));
+app.set('view engine','ejs')
 app.engine('ejs',ejsMate)
 // Middleware to parse JSON (if sending JSON)
 app.use(express.json());
 app.use(methodOverride("_method"))
-app.set('view engine','ejs')
 app.use(express.static(path.join(__dirname,"/public")))
 main().then(()=>{
     console.log("connected to Database successfully")
