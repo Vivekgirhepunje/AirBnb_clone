@@ -1,11 +1,17 @@
 const express = require('express');
 const app = express();
+const listing= require('./routes/listing.js')
+const review= require('./routes/review.js')
 const mongoose= require('mongoose');
-const Listing=  require("./models/listing.js");
+
 const mongoURL='mongodb://127.0.0.1:27017/wanderlust'
 const path = require('path');
 const methodOverride= require('method-override')
 const ejsMate= require('ejs-mate')
+const ExpressError = require('./utils/ExpressError.js')
+const {wrapAsync} = require('./utils/wrapAsync.js')
+const {validateListingSchema,validateReviewSchema} = require('./models/validateSchema.js')
+
 
 
 // Middleware to parse URL-encoded bodies (form data)
@@ -16,6 +22,7 @@ app.engine('ejs',ejsMate)
 app.use(express.json());
 app.use(methodOverride("_method"))
 app.use(express.static(path.join(__dirname,"/public")))
+
 main().then(()=>{
     console.log("connected to Database successfully")
 })
@@ -28,64 +35,28 @@ async function main(){
 }
 
 
+// route route
 app.get('/',(req,res)=>{
     res.send("welcome to my Website");
 })
-// create listing using post route data will added to database
+
+// for hadling all the request starting with /listings
+app.use('/listings',listing);
+app.use('/listings/:id/reviews',review)
 
 
-app.get('/listings', async(req,res)=>{
-   const allListing = await Listing.find(); // return the array of all the documents
-   res.render('./listings/index.ejs',{allListing})
-})
-app.get('/listings/new',(req,res)=>{
-    res.render('./listings/new.ejs');
-})
+// handling invalid route 
+app.all("*", (req, res, next) => {
+  next(new ExpressError(404, "Page Not Found!"));
+});
 
-app.get('/listings/:id',async (req,res)=>{
-   let listing= await Listing.findById(req.params.id)
-   res.render('./listings/show.ejs',{listing})
-})
 
-// for creating new listing
-
-app.post('/listings',async (req,res)=>{
-    const newListing= new Listing(req.body.listing);
-    await newListing.save();
-    // console.log("new listing created")
-    res.redirect('/listings')
+// error-handling Middlewares 
+app.use((err,req,res,next)=>{
+    let{status=500,message="Something went wrong"}=err
+    res.status(status).render("error.ejs",{message})
 })
 
-// for editing existing listing
-app.get("/listings/:id/edit",async (req,res)=>{
-    let listing=await Listing.findById(req.params.id)
-    res.render('./listings/edit.ejs',{listing})
-})
-
-app.put('/listings/:id',async (req,res)=>{
-    let {id}= req.params;
-    await Listing.findByIdAndUpdate(id,{...req.body.listing})
-    res.redirect(`/listings/${id}`)
-})
-
-// remove listing using id 
- app.delete('/listings/:id',async (req,res)=>{
-    let {id}= req.params;
-    await Listing.findByIdAndDelete(id);
-    res.redirect('/listings')
- })
-
-// app.get('/testListing',async (req,res)=>{
-//     let samepleListing = new Listing({
-//         title:"my new Villa",
-//         description:"By the beach",
-//         price:2200,
-//         location:"mumbai",
-//         country:"India"
-//     })
-//     await samepleListing.save();
-//     console.log("listing saved");
-// })
 
 app.listen(8080,()=>{
    console.log("server is running on port: 8080")

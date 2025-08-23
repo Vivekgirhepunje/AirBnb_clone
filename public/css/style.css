@@ -1,15 +1,31 @@
-body{
-    font-family: "Plus Jakarta Sans", sans-serif;
+
+
+html,body {
+ font-family: "Plus Jakarta Sans", sans-serif;
   font-optical-sizing: auto;
-  min-height: 100vh;
+  height: 100%;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  padding-top: 2.5rem;
+
+}
+
+.container {
+  flex: 1; /* pushes footer down */
+}
+
+footer {
+  background: #eee; /* your footer bg */
+  padding: 1rem;
+  text-align: center;
 }
 
 
-
 /*Navbar*/
-.navbar {
-     min-height: 5rem; 
-    background-color:white;
+.navbar{
+  background-color: white;   
+  min-height: 5rem;       
 }
 
 
