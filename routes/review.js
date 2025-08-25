@@ -7,7 +7,7 @@ const router= express.Router({mergeParams:true})
 
 
 const validateReview= function(req,res,next){
-    console.log("we are in validateReview")
+    
     const {error,value} = validateReviewSchema.validate(req.body,{ abortEarly: false })
     
     if(error){
@@ -27,7 +27,7 @@ const validateReview= function(req,res,next){
     listing.reviews.push(newReview);
     await listing.save()
     await newReview.save()
-    console.log(await listing.populate('reviews'))
+    req.flash("success","Review Added!");
     res.redirect(`/listings/${id}`)
 }))
 
@@ -36,6 +36,7 @@ router.delete('/:reviewId',wrapAsync(async (req,res)=>{
     const {id,reviewId}= req.params;
     await Listing.findByIdAndUpdate(id,{$pull:{reviews:reviewId}})
     await Review.findByIdAndDelete(reviewId);
+    req.flash("success","Review Deleted!");
     res.redirect(`/listings/${id}`)
 }))
 
