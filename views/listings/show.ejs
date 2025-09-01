@@ -9,9 +9,10 @@
                  alt="<%= listing.title %>" 
                  class="img-fluid rounded shadow mb-4"
                  style="max-height: 300px; min-width:350px; object-fit: cover;">
-
+            <p><i>Owned by </i><b><%=listing.owner.username%></b></p>
             <!-- Buttons -->
-            <div class="mb-3">
+             <% if (currentUser && currentUser._id.equals(listing.owner._id)) { %>
+               <div class="mb-3">
                 <form style="display: inline-block;" method="get" action="/listings/<%= listing._id %>/edit">
                     <button class="btn btn-primary me-2">Edit Listing</button>
                 </form>
@@ -19,6 +20,8 @@
                     <button class="btn edit-btn">Delete Listing</button>
                 </form>
             </div>
+             <% } %>
+           
 
             <!-- Info -->
             <h3 class="fw-bold"><%= listing.title %></h3>
@@ -28,6 +31,7 @@
             <p><i class="fa-solid fa-flag"></i> <%= listing.country %></p>
 
             <!-- Leave Your Review -->
+<% if(currentUser){%>
 <div class="card shadow-sm mt-4">
     <div class="card-body">
         <h5 class="fw-bold mb-3 text-start">Leave Your Review</h5>
@@ -60,7 +64,7 @@
         </form>
     </div>
 </div>
-
+<%}%>
 <!-- Reviews Section -->
 <div class="mt-4">
   <h5 class="fw-bold mb-3 text-start">Reviews</h5>
@@ -71,9 +75,12 @@
         <div class="col-md-6 mb-3">
           <div class="card h-100 shadow-sm rounded-2">
             <div class="card-body border border-md-black ">
+              <p class="text-end">@<b><i><%=review.author.username%></i></b> </p>
               <p class="fw-semibold mb-1">Rating: <%= review.rating %>/5</p>
               <p class="text-muted mb-0"><%= review.comment %></p>
+              <%if(currentUser && currentUser._id.equals(review.author._id)) {%>
               <form  action='/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE' method="post"><button class="btn btn-danger">Delete</button></form>
+              <%}%>
             </div>
           </div>
         </div>
