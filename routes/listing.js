@@ -46,7 +46,7 @@ router.get("/:id/edit",isLoggedIn,isOwner,wrapAsync(listingController.renderEdit
 
 
 // sending edited listing to DB
-router.put('/:id',isLoggedIn,isOwner,validateListing,wrapAsync(listingController.editListing))
+router.put('/:id',isLoggedIn,isOwner,upload.single('myFile'),validateListing,wrapAsync(listingController.editListing))
 
 
 // remove listing using id 
