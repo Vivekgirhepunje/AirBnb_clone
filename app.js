@@ -1,10 +1,12 @@
 const express = require('express');
-const session = require('express-session')
+if(process.env.NODE_ENV!="production"){
 require('dotenv').config()
+}
+const session = require('express-session')
 const app = express();
 const listingRouter= require('./routes/listing.js')
 const reviewRouter= require('./routes/review.js')
-const userRouter= require('./routes/uesr.js')
+const userRouter= require('./routes/user.js')
 const mongoose= require('mongoose');
 const flash =  require('connect-flash')
 const passport= require('passport')

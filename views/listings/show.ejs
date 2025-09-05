@@ -38,20 +38,25 @@
         <form action="/listings/<%= listing._id %>/reviews" method="POST" class="text-start  needs-validation" novalidate>
             
             <!-- Rating -->
-            <div class="mb-3">
-                <label for="rating" class="form-label fw-semibold">Rating: 
-                    <span id="ratingValue" class="ms-2">3</span>/5
-                </label>
-                <input type="range" 
-                       id="rating" 
-                       name="review[rating]" 
-                       class="form-range" 
-                       min="1" max="5" step="1" value="3"
-                       oninput="document.getElementById('ratingValue').innerText = this.value">
-            </div>
+        <div>
+<fieldset class="starability-grow">
+  <legend>Rating:</legend>
+  <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="0" checked aria-label="No rating." />
+  <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+  <label for="first-rate1" title="Terrible">1 star</label>
+  <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+  <label for="first-rate2" title="Not good">2 stars</label>
+  <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+  <label for="first-rate3" title="Average">3 stars</label>
+  <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+  <label for="first-rate4" title="Very good">4 stars</label>
+  <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+  <label for="first-rate5" title="Amazing">5 stars</label>
+</fieldset>
+</div>
 
             <!-- Comment -->
-            <div class="mb-3">
+            <div class="mb-3 mt-1">
                 <label for="comment" class="form-label fw-semibold">Your Comment</label>
                 <textarea required id="comment" name="review[comment]" rows="3" class="form-control" placeholder="Write your thoughts..." ></textarea>
                 <div class="invalid-feedback">Please add some comments for review</div>
@@ -76,7 +81,7 @@
           <div class="card h-100 shadow-sm rounded-2">
             <div class="card-body border border-md-black ">
               <p class="text-end">@<b><i><%=review.author.username%></i></b> </p>
-              <p class="fw-semibold mb-1">Rating: <%= review.rating %>/5</p>
+              <p class="starability-result m-auto" data-rating=<%=review.rating%>></p>
               <p class="text-muted mb-0"><%= review.comment %></p>
               <%if(currentUser && currentUser._id.equals(review.author._id)) {%>
               <form  action='/listings/<%=listing._id%>/reviews/<%=review._id%>?_method=DELETE' method="post"><button class="btn btn-danger">Delete</button></form>

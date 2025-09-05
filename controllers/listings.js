@@ -20,8 +20,10 @@ module.exports.showListing= async (req,res)=>{
 }
 
 module.exports.createListing= async (req,res)=>{
+    const{path:url,filename}= req.file
     const newListing= new Listing(req.body.listing);
     newListing.owner=req.user._id;
+    newListing.image={url,filename}
     await newListing.save();
     // console.log("new listing created")
     //flash message - new listing created 

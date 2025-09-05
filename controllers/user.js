@@ -30,7 +30,6 @@ module.exports.signup=async(req,res)=>{
         return next(err)
     }
     req.flash("success","User has successfully Registered!")
-    console.log(user)
     res.redirect('/listings')
    })
     }

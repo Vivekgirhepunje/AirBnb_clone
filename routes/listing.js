@@ -1,4 +1,5 @@
 const express = require('express')
+const multer= require('multer')
 const router= express.Router()
 const ExpressError = require('../utils/ExpressError.js')
 const {wrapAsync} = require('../utils/wrapAsync.js')
@@ -6,7 +7,8 @@ const {validateListingSchema,validateReviewSchema} = require('../models/validate
 const Listing=  require("../models/listing.js");
 const {isLoggedIn,isOwner}= require('../middleware.js')
 const listingController = require('../controllers/listings.js')
-
+const{storage}=require("../cloudConfig.js")
+const upload= multer({storage:storage})
 
 const validateListing= function(req,res,next){
     
@@ -35,7 +37,8 @@ router.get('/:id',wrapAsync(listingController.showListing))
 
 
 // for creating new listing
-router.post('/',validateListing,isLoggedIn,wrapAsync(listingController.createListing))
+router.post('/',isLoggedIn,upload.single('myFile'),validateListing,wrapAsync(listingController.createListing))
+
 
 
 // for editing existing listing it will show form where field are filled with prev. values
@@ -47,7 +50,7 @@ router.put('/:id',isLoggedIn,isOwner,validateListing,wrapAsync(listingController
 
 
 // remove listing using id 
-router.delete('/:id',isLoggedIn,isOwner,wrapAsync(listingController.deleteListing))
+router.delete('/:id',isLoggedIn,isOwner,wrapAsync(listingController.destroyListing))
 
 
 module.exports= router;
